@@ -1,0 +1,48 @@
+<!DOCTYPE MeshLabDocument>
+<MeshLabProject>
+ <ProjStage>240 
+</ProjStage>
+ <lastSaveTime>2024-03-21T17:19:01
+</lastSaveTime>
+ <MeshGroup>
+  <MLMesh numtoothsegmented="0" filename="output_mesh.stl" UpperOrLowerJaw="UpperJaw" seg_project_name="1.mlp" segment_status="1" label="output_mesh.stl">
+   <MLMatrix44>
+1 0 0 0 
+0 1 0 0 
+0 0 1 0 
+0 0 0 1 
+</MLMatrix44>
+   <VertexsPickedForLocate>
+</VertexsPickedForLocate>
+   <ToothExistMark>
+ 
+</ToothExistMark>
+   <CtModelRegistrated>
+0
+</CtModelRegistrated>
+   <ToothAxis>
+</ToothAxis>
+   <ToothControlsIndex>
+
+</ToothControlsIndex>
+   <CrownBoundaryCtrlList/>
+   <BorderIndexEachTooth>
+
+</BorderIndexEachTooth>
+   <ToothLabelFDI>
+    <LabelFDI>
+
+</LabelFDI>
+   </ToothLabelFDI>
+   <FeaturePointsGroup/>
+   <RootIntervalList>
+</RootIntervalList>
+   <treatment_question_info_>
+</treatment_question_info_>
+   <treatment_design_info_>
+</treatment_design_info_>
+   <SegmentedToothCrownList/>
+   <SegmentedCrownList/>
+  </MLMesh>
+ </MeshGroup>
+</MeshLabProject>

@@ -1,0 +1,677 @@
+{
+    "ActiveCorrector": {
+        "descrction": "主动矫治器",
+        "value": "上颌 01-10 , 下颌 01-02"
+    },
+    "AttachmentTemplate": {
+        "descrction": "附件模板",
+        "value": "上颌01 下颌01"
+    },
+    "DescriptionTreatmentPlan": {
+        "descrction": "矫治方案说明",
+        "value": [
+            {
+                "Step": {
+                    "descrction": "第1步",
+                    "value": [
+                        "牵引扣：从该步矫治器起，矫治器会在牙位【16】 ，【11】 ，【21】 ，【26】,预留牵引扣位置，临床粘接",
+                        "精密切割：在该步矫治器前，矫治器会在牙位【43】 ，【33】做精密切割，无需临床操作",
+                        "转矩点：从该步矫治器起，矫治器会在牙位【42】 ，【41】 ，【31】 ，【32】设计转矩点，利于控制转矩，无需临床操作"
+                    ]
+                }
+            }
+        ]
+    },
+    "DesignThought": {
+        "descrction": "设计思路",
+        "value": ""
+    },
+    "FileFullPathNamePdf": {
+        "descrction": "FileFullPathNamePdf",
+        "value": "C:\\Users\\deskadmin\\Desktop\\012406060003\\overViewFile.pdf"
+    },
+    "Hospital": {
+        "descrction": "所在医院",
+        "value": ""
+    },
+    "Issues List": {
+        "descrction": "问题列表",
+        "value": ""
+    },
+    "Lower steps": {
+        "descrction": "下颌步数",
+        "value": "2"
+    },
+    "Note": {
+        "descrction": "注意事项",
+        "value": [
+            "建议患者每步佩戴10-14天，每天佩戴20小时以上，避免暴力摘戴并使用为您配置的专用咬胶，每次带上矫治器后，从牙列一侧至另一侧咬6-7次，辅助矫治器就位。",
+            "请医生根据临床及影像等检查，排除牙体、牙髓、牙周、颌骨、颞下颌关节等异常后，再行隐形矫正治疗。",
+            "矫治过程中请临床检查上下颌是否存在咬合干扰，必要时需调颌，避免早接触。",
+            "矫治过程中注意检查牙齿邻接是否过紧，必要时请使用砂条松解过紧的邻间隙，尤其是被压低的牙齿与扭转牙的近远中。",
+            "矫治过程中请临床密切观察患者的牙周状况，牙周状况恶化时请暂停佩戴矫治器，及时进行牙周治疗。",
+            "定期复诊，每天坚持使用咬胶，注意口腔卫生。3D动画方案中牙龈与牙齿移动为模拟移动效果，实际治疗结果可能不同。最终矫治效果以患者口腔内实际佩戴情况为准。",
+            "矫治结束可能存在黑三角，可通过邻面去釉改善。",
+            "邻面去釉后可进行涂氟操作，减少患龋风险。",
+            "对方案如有疑问或需要更改方案可联系客服。"
+        ]
+    },
+    "Order ID": {
+        "descrction": "编号",
+        "value": ""
+    },
+    "PassiveCorrector": {
+        "descrction": "被动矫治器（保持器）",
+        "value": "下颌03-10"
+    },
+    "Patient Doctor": {
+        "descrction": "主治医生",
+        "value": ""
+    },
+    "Patient ID": {
+        "descrction": "患者编号",
+        "value": ""
+    },
+    "Patient Name": {
+        "descrction": "Patient Name",
+        "value": ""
+    },
+    "TreatmentInfo": [
+        {
+            "18": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": false
+            }
+        },
+        {
+            "17": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "16": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                    {
+                        "lingual_side": false,
+                        "range": [
+                            "01-10"
+                        ],
+                        "type": 1
+                    },
+                    {
+                        "lingual_side": true,
+                        "range": [
+                            "01-10"
+                        ],
+                        "type": 1
+                    }
+                ],
+                "exist": true
+            }
+        },
+        {
+            "15": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "14": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "13": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "12": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "11": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                    {
+                        "lingual_side": true,
+                        "range": [
+                            "01-10"
+                        ],
+                        "type": 1
+                    }
+                ],
+                "exist": true
+            }
+        },
+        {
+            "21": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                    {
+                        "lingual_side": true,
+                        "range": [
+                            "01-10"
+                        ],
+                        "type": 1
+                    }
+                ],
+                "exist": true
+            }
+        },
+        {
+            "22": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "23": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "24": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "25": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "26": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                    {
+                        "lingual_side": true,
+                        "range": [
+                            "01-10"
+                        ],
+                        "type": 1
+                    },
+                    {
+                        "lingual_side": false,
+                        "range": [
+                            "01-10"
+                        ],
+                        "type": 1
+                    }
+                ],
+                "exist": true
+            }
+        },
+        {
+            "27": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "28": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": false
+            }
+        },
+        {
+            "48": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": false
+            }
+        },
+        {
+            "47": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "46": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "45": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "44": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "43": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                    {
+                        "lingual_side": false,
+                        "range": [
+                            "01-02"
+                        ],
+                        "type": 6
+                    }
+                ],
+                "exist": true
+            }
+        },
+        {
+            "42": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                    {
+                        "lingual_side": false,
+                        "range": [
+                            "01-02"
+                        ],
+                        "type": 0
+                    },
+                    {
+                        "lingual_side": true,
+                        "range": [
+                            "01-02"
+                        ],
+                        "type": 0
+                    }
+                ],
+                "exist": true
+            }
+        },
+        {
+            "41": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                    {
+                        "lingual_side": true,
+                        "range": [
+                            "01-02"
+                        ],
+                        "type": 0
+                    },
+                    {
+                        "lingual_side": false,
+                        "range": [
+                            "01-02"
+                        ],
+                        "type": 0
+                    }
+                ],
+                "exist": true
+            }
+        },
+        {
+            "31": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                    {
+                        "lingual_side": true,
+                        "range": [
+                            "01-02"
+                        ],
+                        "type": 0
+                    },
+                    {
+                        "lingual_side": false,
+                        "range": [
+                            "01-02"
+                        ],
+                        "type": 0
+                    }
+                ],
+                "exist": true
+            }
+        },
+        {
+            "32": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                    {
+                        "lingual_side": true,
+                        "range": [
+                            "01-02"
+                        ],
+                        "type": 0
+                    },
+                    {
+                        "lingual_side": false,
+                        "range": [
+                            "01-02"
+                        ],
+                        "type": 0
+                    }
+                ],
+                "exist": true
+            }
+        },
+        {
+            "33": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                    {
+                        "lingual_side": false,
+                        "range": [
+                            "01-02"
+                        ],
+                        "type": 5
+                    }
+                ],
+                "exist": true
+            }
+        },
+        {
+            "34": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "35": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "36": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "37": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": true
+            }
+        },
+        {
+            "38": {
+                "AttachmentRange": [
+                ],
+                "HaveAttachment": false,
+                "HaveIER": false,
+                "HaveIERRange": [
+                ],
+                "HavePullout": false,
+                "PulloutStep": -1,
+                "SpecialAccessory": [
+                ],
+                "exist": false
+            }
+        }
+    ],
+    "Upper steps": {
+        "descrction": "上颌步数",
+        "value": "10"
+    }
+}

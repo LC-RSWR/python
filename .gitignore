@@ -1,0 +1,7 @@
+
+/venv
+/build
+/.vscode
+/1
+/output
+*.stl
