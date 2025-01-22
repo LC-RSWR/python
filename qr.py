@@ -1,157 +1,164 @@
 import numpy as np
-import pyvista as pv
+import open3d as o3d
 import xml.etree.ElementTree as ET
 from tkinter import Tk, filedialog
-from math import radians
 
 # 1. 打开文件选择对话框
 def open_file_dialog():
-    # 使用Tkinter创建一个隐藏的根窗口
     root = Tk()
-    root.withdraw()  # 隐藏主窗口
+    root.withdraw()
 
-    # 打开XML文件选择对话框
     xml_file_path = filedialog.askopenfilename(title="Select XML file", filetypes=(("XML files", "*.xml"), ("All files", "*.*")))
-    if not xml_file_path:  # 用户取消选择
+    if not xml_file_path:
         print("No XML file selected.")
         return None, None
     
-    # 打开STL文件选择对话框
     stl_file_path = filedialog.askopenfilename(title="Select STL file", filetypes=(("STL files", "*.stl"), ("All files", "*.*")))
-    if not stl_file_path:  # 用户取消选择
+    if not stl_file_path:
         print("No STL file selected.")
         return None, None
     
-    return xml_file_path, stl_file_path
+    txt_file_path = filedialog.askopenfilename(title="Select TXT file", filetypes=(("TXT files", "*.txt"), ("All files", "*.*")))
+    if not txt_file_path:
+        print("No TXT file selected.")
+        return None, None
+    
+    return xml_file_path, stl_file_path, txt_file_path
 
 # 2. 从XML文件读取数据
 def read_xml_data(xml_file_path):
-    # 解析XML文件
     tree = ET.parse(xml_file_path)
     root = tree.getroot()
 
-    # 获取标注信息
     X = float(root.attrib['X'])
     Y = float(root.attrib['Y'])
-    Z = float(root.attrib['Z'])  # 标注点的Z坐标
-    LX = float(root.attrib['LX'])  # LX坐标
-    LY = float(root.attrib['LY'])  # LY坐标
-    LZ = float(root.attrib['LZ'])  # LZ坐标
-    A = float(root.attrib['A'])  # 角度A，单位是度
-    LA = float(root.attrib['LA'])  # 角度A，单位是度
+    Z = float(root.attrib['Z'])
+    LX = float(root.attrib['LX'])
+    LY = float(root.attrib['LY'])
+    LZ = float(root.attrib['LZ'])
+    A = float(root.attrib['A'])
+    LA = float(root.attrib['LA'])
 
-    return X, Y, Z, LX, LY, LZ, A,LA
+    return X, Y, Z, LX, LY, LZ, A, LA
 
-# 3. 渲染STL模型并添加标注点
-def render_stl_and_mark_points(stl_file_path, X, Y, Z, LX, LY, LZ, A, LA):
+# 3. 从TXT文件读取切割点和刀轴方向
+def read_cutting_data(txt_file_path):
+    with open(txt_file_path, 'r') as file:
+        lines = file.readlines()
+        cutting_points = []
+        for line in lines:
+            parts = line.strip().split()
+            if len(parts) == 6:
+                point = list(map(float, parts[:3]))  # 切割点位置
+                direction = list(map(float, parts[3:]))  # 刀轴方向
+                cutting_points.append((point, direction))
+    return cutting_points
+
+# 4. 创建矩形框线条
+def create_rectangle(width, height, color):
+    points = [
+        [-width/2, -height/2, 0],
+        [width/2, -height/2, 0],
+        [width/2, height/2, 0],
+        [-width/2, height/2, 0],
+        [-width/2, -height/2, 0]
+    ]
+    lines = [[i, i+1] for i in range(4)]
+    
+    line_set = o3d.geometry.LineSet()
+    line_set.points = o3d.utility.Vector3dVector(points)
+    line_set.lines = o3d.utility.Vector2iVector(lines)
+    line_set.colors = o3d.utility.Vector3dVector([color for _ in range(len(lines))])
+    
+    return line_set
+
+# 5. 渲染STL模型并添加标注点
+def render_stl_and_mark_points(stl_file_path, X, Y, Z, LX, LY, LZ, A, LA, cutting_data):
     # 加载STL模型
-    mesh = pv.read(stl_file_path)  # STL文件路径
+    mesh = o3d.io.read_triangle_mesh(stl_file_path)
+    mesh.compute_vertex_normals()
+    mesh.paint_uniform_color([0.7, 0.8, 1.0])  # 浅蓝色
 
-    # 创建一个3D绘图环境，启用滑动条功能
-    plotter = pv.Plotter()
+    # 创建可视化窗口
+    vis = o3d.visualization.Visualizer()
+    vis.create_window(window_name="3D Viewer", width=1024, height=768)
     
-    # 先渲染STL模型，设置半透明
-    mesh_actor = plotter.add_mesh(mesh, color="lightblue", show_edges=True, opacity=0.8)
+    # 设置渲染选项
+    opt = vis.get_render_option()
+    opt.background_color = np.asarray([1, 1, 1])  # 白色背景
+    opt.mesh_show_wireframe = True
+    opt.mesh_show_back_face = True
     
-    # 添加透明度调节滑动条
-    def update_opacity(value):
-        mesh_actor.GetProperty().SetOpacity(value)
-        plotter.render()  # 强制立即重新渲染
-        
-    plotter.add_slider_widget(
-        callback=update_opacity,
-        rng=[0, 1],  # 透明度范围从0到1
-        value=0.8,   # 修改默认值为0.8
-        title="Opacity",
-        pointa=(0.02, 0.1),  # 滑动条起点位置
-        pointb=(0.18, 0.1),  # 滑动条终点位置
-        style='modern',
-        event_type='always'  # 设置为始终触发事件
-    )
+    # 添加网格模型
+    vis.add_geometry(mesh)
 
-    # 创建QR码矩形框（8mm x 4mm）
-    qr_width, qr_height = 8, 4  # 单位：mm
-    qr_corners = np.array([
-        [-qr_width/2, -qr_height/2, 0],
-        [qr_width/2, -qr_height/2, 0],
-        [qr_width/2, qr_height/2, 0],
-        [-qr_width/2, qr_height/2, 0]
-    ])
-    
-    # 创建LOGO矩形框（4mm x 4mm）
-    logo_size = 4  # 单位：mm
-    logo_corners = np.array([
-        [-logo_size/2, -logo_size/2, 0],
-        [logo_size/2, -logo_size/2, 0],
-        [logo_size/2, logo_size/2, 0],
-        [-logo_size/2, logo_size/2, 0]
-    ])
+    # 创建QR码矩形框
+    qr_rect = create_rectangle(8, 4, [0, 1, 0])  # 绿色，8mm x 4mm
+    # 旋转QR码矩形框
+    qr_angle_rad = -np.radians(90 - A)
+    R_qr = qr_rect.get_rotation_matrix_from_xyz([0, 0, qr_angle_rad])
+    qr_rect.rotate(R_qr, center=[0, 0, 0])
+    qr_rect.translate([X, Y, Z])
+    vis.add_geometry(qr_rect)
 
-    # 创建QR码的旋转矩阵（与Y轴的夹角）
-    qr_angle_rad = np.radians(90 - A)  # 将与Y轴夹角转换为与X轴夹角，并取负
-    qr_rotation_matrix = np.array([
-        [np.cos(qr_angle_rad), -np.sin(qr_angle_rad), 0],
-        [np.sin(qr_angle_rad), np.cos(qr_angle_rad), 0],
-        [0, 0, 1]
-    ])
-
-    # 创建LOGO的旋转矩阵（与Y轴的夹角）
-    logo_angle_rad = np.radians(90 - LA)  # 将与Y轴夹角转换为与X轴夹角，并取负
-    logo_rotation_matrix = np.array([
-        [np.cos(logo_angle_rad), -np.sin(logo_angle_rad), 0],
-        [np.sin(logo_angle_rad), np.cos(logo_angle_rad), 0],
-        [0, 0, 1]
-    ])
-
-    # 分别旋转并平移矩形框
-    qr_corners = np.dot(qr_corners, qr_rotation_matrix.T)
-    qr_corners = qr_corners + np.array([X, Y, Z])
-    
-    logo_corners = np.dot(logo_corners, logo_rotation_matrix.T)
-    logo_corners = logo_corners + np.array([LX, LY, LZ])
-
-    # 添加QR码矩形框
-    qr_rect = np.vstack((qr_corners, qr_corners[0]))  # 闭合矩形
-    qr_line = pv.lines_from_points(qr_rect)
-    plotter.add_mesh(qr_line, color="green", line_width=5, render_lines_as_tubes=True)
-
-    # 添加LOGO矩形框
-    logo_rect = np.vstack((logo_corners, logo_corners[0]))  # 闭合矩形
-    logo_line = pv.lines_from_points(logo_rect)
-    plotter.add_mesh(logo_line, color="red", line_width=5, render_lines_as_tubes=True)
+    # 创建LOGO矩形框
+    logo_rect = create_rectangle(4, 4, [1, 0, 0])  # 红色，4mm x 4mm
+    # 旋转LOGO矩形框
+    logo_angle_rad = -np.radians(90 - LA)
+    R_logo = logo_rect.get_rotation_matrix_from_xyz([0, 0, logo_angle_rad])
+    logo_rect.rotate(R_logo, center=[0, 0, 0])
+    logo_rect.translate([LX, LY, LZ])
+    vis.add_geometry(logo_rect)
 
     # 添加标注点
-    plotter.add_points(np.array([[LX, LY, LZ]]), color="red", point_size=20, render_points_as_spheres=True)
-    plotter.add_points(np.array([[X, Y, Z]]), color="green", point_size=20, render_points_as_spheres=True)
+    qr_point = o3d.geometry.PointCloud()
+    qr_point.points = o3d.utility.Vector3dVector([[X, Y, Z]])
+    qr_point.paint_uniform_color([0, 1, 0])  # 绿色
+    vis.add_geometry(qr_point)
 
-    # 添加文字标注，使用viewport坐标系统（0-1范围）
-    plotter.add_text(f"LOGO Point:\n({LX:.2f}, {LY:.2f}, {LZ:.2f})", 
-                    position=(0.02, 0.90),  # 左上角，左边距2%，顶部距离5%
-                    font_size=12, 
-                    color='red',
-                    shadow=True,
-                    viewport=True)  # 确保使用viewport坐标系
+    logo_point = o3d.geometry.PointCloud()
+    logo_point.points = o3d.utility.Vector3dVector([[LX, LY, LZ]])
+    logo_point.paint_uniform_color([1, 0, 0])  # 红色
+    vis.add_geometry(logo_point)
 
-    plotter.add_text(f"QR Point:\n({X:.2f}, {Y:.2f}, {Z:.2f})", 
-                    position=(0.02, 0.80),  # 在LOGO Point下方，左边距2%
-                    font_size=12, 
-                    color='green',
-                    shadow=True,
-                    viewport=True)  # 确保使用viewport坐标系
+    # 渲染切割点和刀轴方向
+    for point, direction in cutting_data:
+        # 添加切割点
+        cutting_point = o3d.geometry.PointCloud()
+        cutting_point.points = o3d.utility.Vector3dVector([point])
+        cutting_point.paint_uniform_color([1, 1, 0])  # 黄色
+        vis.add_geometry(cutting_point)
 
-    # 显示结果
-    plotter.show()
+        # 添加刀轴方向
+        line_set = o3d.geometry.LineSet()
+        line_set.points = o3d.utility.Vector3dVector([point, np.array(point) + np.array(direction)])
+        line_set.lines = o3d.utility.Vector2iVector([[0, 1]])
+        line_set.colors = o3d.utility.Vector3dVector([[1, 0, 0]])  # 红色
+        vis.add_geometry(line_set)
 
-# 主程序
-def main():
-    # 通过对话框选择XML和STL文件
-    xml_file_path, stl_file_path = open_file_dialog()
+    # 设置视图
+    vis.get_view_control().set_zoom(0.7)
     
-    if xml_file_path and stl_file_path:
-        # 从XML文件中读取数据
+    # 添加坐标信息
+    vis.add_geometry(create_coordinate_text(f"QR Point: ({X:.2f}, {Y:.2f}, {Z:.2f})", [0, 1, 0]))
+    vis.add_geometry(create_coordinate_text(f"LOGO Point: ({LX:.2f}, {LY:.2f}, {LZ:.2f})", [1, 0, 0]))
+
+    # 运行可视化
+    vis.run()
+    vis.destroy_window()
+
+def create_coordinate_text(text, color):
+    # 创建3D文本（Open3D不直接支持2D文本叠加）
+    text_geometry = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.1)
+    return text_geometry
+
+def main():
+    xml_file_path, stl_file_path, txt_file_path = open_file_dialog()
+    
+    if xml_file_path and stl_file_path and txt_file_path:
         X, Y, Z, LX, LY, LZ, A, LA = read_xml_data(xml_file_path)
-        # 渲染STL模型并添加标注点
-        render_stl_and_mark_points(stl_file_path, X, Y, Z, LX, LY, LZ, A, LA)
+        cutting_data = read_cutting_data(txt_file_path)
+        render_stl_and_mark_points(stl_file_path, X, Y, Z, LX, LY, LZ, A, LA, cutting_data)
 
 if __name__ == "__main__":
     main()
