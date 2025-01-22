@@ -1,29 +1,11 @@
 import numpy as np
 import open3d as o3d
 import xml.etree.ElementTree as ET
-from tkinter import Tk, filedialog
+from tkinter import Tk, filedialog, Button
 
 # 1. 打开文件选择对话框
-def open_file_dialog():
-    root = Tk()
-    root.withdraw()
-
-    xml_file_path = filedialog.askopenfilename(title="Select XML file", filetypes=(("XML files", "*.xml"), ("All files", "*.*")))
-    if not xml_file_path:
-        print("No XML file selected.")
-        return None, None
-    
-    stl_file_path = filedialog.askopenfilename(title="Select STL file", filetypes=(("STL files", "*.stl"), ("All files", "*.*")))
-    if not stl_file_path:
-        print("No STL file selected.")
-        return None, None
-    
-    txt_file_path = filedialog.askopenfilename(title="Select TXT file", filetypes=(("TXT files", "*.txt"), ("All files", "*.*")))
-    if not txt_file_path:
-        print("No TXT file selected.")
-        return None, None
-    
-    return xml_file_path, stl_file_path, txt_file_path
+def open_file_dialog(title, filetypes):
+    return filedialog.askopenfilename(title=title, filetypes=filetypes)
 
 # 2. 从XML文件读取数据
 def read_xml_data(xml_file_path):
@@ -43,15 +25,19 @@ def read_xml_data(xml_file_path):
 
 # 3. 从TXT文件读取切割点和刀轴方向
 def read_cutting_data(txt_file_path):
+    cutting_points = []
     with open(txt_file_path, 'r') as file:
         lines = file.readlines()
-        cutting_points = []
         for line in lines:
             parts = line.strip().split()
-            if len(parts) == 6:
+            if len(parts) == 6:  # 切割点位置 + 刀轴方向
                 point = list(map(float, parts[:3]))  # 切割点位置
                 direction = list(map(float, parts[3:]))  # 刀轴方向
                 cutting_points.append((point, direction))
+            elif len(parts) == 7:  # 四元素形式
+                point = list(map(float, parts[:3]))  # 切割点位置
+                quaternion = list(map(float, parts[3:]))  # 四元素
+                cutting_points.append((point, quaternion))
     return cutting_points
 
 # 4. 创建矩形框线条
@@ -129,12 +115,25 @@ def render_stl_and_mark_points(stl_file_path, X, Y, Z, LX, LY, LZ, A, LA, cuttin
         cutting_point.paint_uniform_color([1, 1, 0])  # 黄色
         vis.add_geometry(cutting_point)
 
-        # 添加刀轴方向
-        line_set = o3d.geometry.LineSet()
-        line_set.points = o3d.utility.Vector3dVector([point, np.array(point) + np.array(direction)])
-        line_set.lines = o3d.utility.Vector2iVector([[0, 1]])
-        line_set.colors = o3d.utility.Vector3dVector([[1, 0, 0]])  # 红色
-        vis.add_geometry(line_set)
+        # 判断是刀轴方向还是四元素
+        if len(direction) == 3:  # 刀轴方向
+            # 添加刀轴方向
+            line_set = o3d.geometry.LineSet()
+            line_set.points = o3d.utility.Vector3dVector([point, np.array(point) + np.array(direction) * 3])  # 刀轴长度加长
+            line_set.lines = o3d.utility.Vector2iVector([[0, 1]])
+            line_set.colors = o3d.utility.Vector3dVector([[1, 0, 0]])  # 红色
+            vis.add_geometry(line_set)
+        elif len(direction) == 4:  # 四元素
+            # 计算旋转矩阵
+            q = np.array(direction)
+            R = o3d.geometry.get_rotation_matrix_from_quaternion(q)
+            # 计算刀轴方向的终点
+            end_point = np.array(point) + R @ np.array([0, 0, 3])  # 假设刀轴方向沿Z轴，长度加长
+            line_set = o3d.geometry.LineSet()
+            line_set.points = o3d.utility.Vector3dVector([point, end_point])
+            line_set.lines = o3d.utility.Vector2iVector([[0, 1]])
+            line_set.colors = o3d.utility.Vector3dVector([[1, 0, 0]])  # 红色
+            vis.add_geometry(line_set)
 
     # 设置视图
     vis.get_view_control().set_zoom(0.7)
@@ -153,7 +152,7 @@ def create_coordinate_text(text, color):
     return text_geometry
 
 def main():
-    xml_file_path, stl_file_path, txt_file_path = open_file_dialog()
+    xml_file_path, stl_file_path, txt_file_path = open_file_dialog("Select Files", [("XML files", "*.xml"), ("STL files", "*.stl"), ("TXT files", "*.txt")])
     
     if xml_file_path and stl_file_path and txt_file_path:
         X, Y, Z, LX, LY, LZ, A, LA = read_xml_data(xml_file_path)
