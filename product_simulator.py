@@ -2,7 +2,7 @@ import os
 import numpy as np
 import open3d as o3d
 import xml.etree.ElementTree as ET
-from PyQt5.QtWidgets import QApplication, QMainWindow, QSlider, QLabel, QVBoxLayout, QWidget, QComboBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QSlider, QLabel, QVBoxLayout, QWidget, QComboBox, QFileDialog
 from PyQt5.QtCore import Qt, QTimer  # 导入 Qt 和 QTimer
 
 # 1. 打开文件选择对话框
@@ -140,7 +140,7 @@ def render_stl_and_mark_points(vis, stl_file_path, X, Y, Z, LX, LY, LZ, A, LA, c
             vis.add_geometry(line_set)
 
     # 设置视图
-    vis.get_view_control().set_zoom(0.7)
+    vis.get_view_control().set_zoom(0.8)
 
     # 添加坐标信息
     vis.add_geometry(create_coordinate_text(f"QR Point: ({X:.2f}, {Y:.2f}, {Z:.2f})", [0, 1, 0]))
@@ -223,6 +223,11 @@ class MainWindow(QMainWindow):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_view)
         self.timer.start(100)  # 每100毫秒更新一次视图
+    
+    def closeEvent(self, event):
+        self.timer.stop()  # 停止定时器
+        self.vis.destroy_window()  # 销毁可视化窗口
+        event.accept()  # 接受关闭事件
 
     def load_files(self, index):
         xml_file_path, stl_file_path, txt_file_path = self.steps[index]
@@ -260,8 +265,17 @@ def main(directory):
 
 if __name__ == "__main__":
     import sys
+    from PyQt5.QtWidgets import QApplication, QFileDialog
+
+    app = QApplication(sys.argv)  # 创建 QApplication 实例
+
     if len(sys.argv) < 2:
-        print("请提供文件夹路径作为命令行参数。")
+        folder_path = QFileDialog.getExistingDirectory(None, "选择文件夹")  # 弹出选择文件夹对话框
+        if folder_path:  # 如果用户选择了文件夹
+            main(folder_path)
+        else:
+            print("未选择文件夹，程序将退出。")
+            sys.exit(1)  # 退出程序
     else:
         main(sys.argv[1])
     #main(r"C:\Users\deskadmin\Desktop\211207")
