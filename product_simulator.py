@@ -241,6 +241,7 @@ class MainWindow(QMainWindow):
         self.timer.stop()  # 停止定时器
         self.vis.destroy_window()  # 销毁可视化窗口
         event.accept()  # 接受关闭事件
+        sys.exit(1)  # 退出程序
 
     def load_files(self, index):
         xml_file_path, stl_file_path, txt_file_path = self.steps[index]
@@ -282,7 +283,7 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)  # 创建 QApplication 实例
 
-    main(r"C:\Users\deskadmin\Desktop\211207")
+    #main(r"C:\Users\deskadmin\Desktop\211207")
 
     if len(sys.argv) < 2:
         folder_path = QFileDialog.getExistingDirectory(None, "选择文件夹")  # 弹出选择文件夹对话框
