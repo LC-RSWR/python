@@ -181,7 +181,7 @@ def list_files_in_directory(directory):
 class MainWindow(QMainWindow):
     def __init__(self, directory, steps):
         super().__init__()
-        self.setWindowTitle("加工轨迹、打标查看器")
+        self.setWindowTitle("加工轨迹、打标查看器步骤选择")
         self.setGeometry(100, 100, 800, 600)
 
         # 创建滑动条
@@ -210,7 +210,7 @@ class MainWindow(QMainWindow):
 
         # Open3D 可视化
         self.vis = o3d.visualization.Visualizer()
-        self.vis.create_window(window_name="Open3D Viewer", width=1280, height=768)
+        self.vis.create_window(window_name="加工轨迹、打标查看器", width=1280, height=768)
 
         self.steps = steps
         self.load_files(0)  # 加载初始步骤
@@ -257,4 +257,4 @@ if __name__ == "__main__":
         print("请提供文件夹路径作为命令行参数。")
     else:
         main(sys.argv[1])
-    main(r"C:\Users\deskadmin\Desktop\211207")
+    #main(r"C:\Users\deskadmin\Desktop\211207")
