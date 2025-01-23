@@ -181,27 +181,31 @@ def list_files_in_directory(directory):
 class MainWindow(QMainWindow):
     def __init__(self, directory, steps):
         super().__init__()
-        self.setWindowTitle("加工轨迹、打标查看器步骤选择")
+        self.setWindowTitle("加工轨迹、打标查看器")
         self.setGeometry(100, 100, 800, 600)
 
         # 创建滑动条
         self.slider = QSlider(Qt.Horizontal, self)  # 使用 Qt.Horizontal
         self.slider.setRange(0, len(steps) - 1)
-        self.slider.valueChanged.connect(self.update_model)
+        self.slider.sliderReleased.connect(self.update_model)
 
         # 创建下拉框
         self.combo_box = QComboBox(self)
-        self.combo_box.addItems([f"步骤 {i + 1}" for i in range(len(steps))])  # 添加步骤索引
+        self.combo_box.addItems([f"步骤 {i + 1}: {os.path.basename(step[1])}" for i, step in enumerate(steps)])  # 添加步骤索引和文件名
         self.combo_box.currentIndexChanged.connect(self.update_from_combobox)
 
         # 创建标签
         self.label = QLabel("选择步骤", self)
+
+        # 创建当前选中的 STL 文件名标签
+        self.stl_label = QLabel("当前 STL 文件: ", self)  # 新增标签
 
         # 布局
         layout = QVBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(self.slider)
         layout.addWidget(self.combo_box)  # 添加下拉框到布局
+        layout.addWidget(self.stl_label)  # 添加 STL 文件名标签到布局
 
         # 创建一个 QWidget 并设置布局
         container = QWidget()
@@ -210,7 +214,7 @@ class MainWindow(QMainWindow):
 
         # Open3D 可视化
         self.vis = o3d.visualization.Visualizer()
-        self.vis.create_window(window_name="加工轨迹、打标查看器", width=1280, height=768)
+        self.vis.create_window(window_name="Open3D Viewer", width=1280, height=768)
 
         self.steps = steps
         self.load_files(0)  # 加载初始步骤
@@ -225,6 +229,9 @@ class MainWindow(QMainWindow):
         X, Y, Z, LX, LY, LZ, A, LA = read_xml_data(xml_file_path)
         cutting_data = read_cutting_data(txt_file_path)
         render_stl_and_mark_points(self.vis, stl_file_path, X, Y, Z, LX, LY, LZ, A, LA, cutting_data)
+
+        # 更新当前 STL 文件名标签
+        self.stl_label.setText(f"当前 STL 文件: {os.path.basename(stl_file_path)}")  # 显示文件名
 
     def update_model(self):
         index = self.slider.value()
