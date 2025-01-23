@@ -4,6 +4,7 @@ import open3d as o3d
 import xml.etree.ElementTree as ET
 from PyQt5.QtWidgets import QApplication, QMainWindow, QSlider, QLabel, QVBoxLayout, QWidget, QComboBox, QFileDialog
 from PyQt5.QtCore import Qt, QTimer  # 导入 Qt 和 QTimer
+from PyQt5.QtWidgets import QDesktopWidget  # 导入 QDesktopWidget
 
 # 1. 打开文件选择对话框
 def open_file_dialog():
@@ -82,7 +83,7 @@ def render_stl_and_mark_points(vis, stl_file_path, X, Y, Z, LX, LY, LZ, A, LA, c
     # 加载STL模型
     mesh = o3d.io.read_triangle_mesh(stl_file_path)
     mesh.compute_vertex_normals()
-    mesh.paint_uniform_color([0.7, 0.8, 1.0])  # 浅蓝色
+    mesh.paint_uniform_color([0.8, 0.8, 0.8])  # 灰白色
 
     # 添加网格模型
     vis.add_geometry(mesh)
@@ -182,7 +183,14 @@ class MainWindow(QMainWindow):
     def __init__(self, directory, steps):
         super().__init__()
         self.setWindowTitle("加工轨迹、打标查看器")
-        self.setGeometry(100, 100, 800, 600)
+
+ # 获取屏幕尺寸
+        screen = QDesktopWidget().screenGeometry()
+        width = int(screen.width() * 0.7)  # 80% 的宽度
+        height = int(screen.height() * 0.9)  # 80% 的高度
+
+
+        self.setGeometry(width + 100, 600, 400, 400)
 
         # 创建滑动条
         self.slider = QSlider(Qt.Horizontal, self)  # 使用 Qt.Horizontal
@@ -212,9 +220,11 @@ class MainWindow(QMainWindow):
         container.setLayout(layout)
         self.setCentralWidget(container)
 
+
+       
         # Open3D 可视化
         self.vis = o3d.visualization.Visualizer()
-        self.vis.create_window(window_name="Open3D Viewer", width=1280, height=768)
+        self.vis.create_window(window_name="加工模型轨迹、打标查看器", width=width, height=height)
 
         self.steps = steps
         self.load_files(0)  # 加载初始步骤
@@ -223,6 +233,9 @@ class MainWindow(QMainWindow):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_view)
         self.timer.start(100)  # 每100毫秒更新一次视图
+
+        # 在创建可视化窗口后，设置背景颜色
+        self.vis.get_render_option().background_color = [0.7, 0.9, 1.0]  # 浅蓝色
     
     def closeEvent(self, event):
         self.timer.stop()  # 停止定时器
@@ -268,6 +281,8 @@ if __name__ == "__main__":
     from PyQt5.QtWidgets import QApplication, QFileDialog
 
     app = QApplication(sys.argv)  # 创建 QApplication 实例
+
+    main(r"C:\Users\deskadmin\Desktop\211207")
 
     if len(sys.argv) < 2:
         folder_path = QFileDialog.getExistingDirectory(None, "选择文件夹")  # 弹出选择文件夹对话框
