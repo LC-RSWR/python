@@ -56,10 +56,10 @@ class MainWindow(QMainWindow):
 
         # 获取屏幕尺寸
         screen = QDesktopWidget().screenGeometry()
-        width = int(screen.width() * 0.8)  # 80% 的宽度
-        height = int(screen.height() * 0.8)  # 80% 的高度
-
-        self.setGeometry(100, 100, width, height)
+        width = int(screen.width() * 0.7)  # 80% 的宽度
+        height = int(screen.height() * 0.9)  # 80% 的高度
+        
+        self.setGeometry(width + 100, 600, 400, 400)
 
         # 预加载模型和数据
         self.steps = steps
@@ -105,7 +105,7 @@ class MainWindow(QMainWindow):
         # 定时器设置
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_view)
-        self.timer.start(100)
+        self.timer.start(10)
 
         # 在创建可视化窗口后，设置背景颜色
         self.vis.get_render_option().background_color = [0.7, 0.9, 1.0]  # 浅蓝色
@@ -117,6 +117,8 @@ class MainWindow(QMainWindow):
         progress_dialog.setModal(True)
         progress_dialog.setValue(0)
 
+        # 设置进度条的大小
+        progress_dialog.setFixedSize(400, 100)  # 宽度400，高度100
         for index, step in enumerate(self.steps):
             xml_file_path, stl_file_path, txt_file_path = step
             # 加载 STL 模型
