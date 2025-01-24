@@ -74,7 +74,18 @@ class MainWindow(QMainWindow):
 
         # 创建下拉框
         self.combo_box = QComboBox(self)
-        self.combo_box.addItems([f"步骤 {i + 1}: {os.path.basename(step[1])}" for i, step in enumerate(steps)])
+
+        # 添加步骤描述
+        for step in steps:
+            stl_file_name = os.path.basename(step[1])  # 获取 STL 文件名
+            step_number = ''.join(filter(str.isdigit, stl_file_name))[-2:]  # 提取文件名中的后两位数字
+            if 'U' in stl_file_name:  # 判断文件名中是否包含 'N'
+                description = f"步骤 {step_number}: 上颌"
+            else:
+                description = f"步骤 {step_number}: 下颌"
+            
+            self.combo_box.addItem(description)
+
         self.combo_box.currentIndexChanged.connect(self.update_from_combobox)
 
         # 创建标签
