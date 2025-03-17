@@ -1,14 +1,26 @@
-import os
+﻿import os
 import numpy as np
 import open3d as o3d
 import xml.etree.ElementTree as ET
 from PyQt5.QtWidgets import QApplication, QMainWindow, QSlider, QLabel, QVBoxLayout, QWidget, QComboBox, QFileDialog, QProgressDialog
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import QDesktopWidget
+import os
+import json
+import sys
+import io
+import re
+from io import BytesIO
+from pathlib import Path
+import shutil  # 导入 shutil 模块
+import tempfile  # 导入 tempfile 模块
 
 def list_files_in_directory(directory):
     steps = {}
     
+    # 确保目录路径使用正确的编码
+    directory = str(directory)  # 确保路径是一个 Unicode 字符串
+
     # 首先收集所有 STL 文件
     for filename in os.listdir(directory):
         if filename.endswith(".stl"):
@@ -127,6 +139,8 @@ class MainWindow(QMainWindow):
         progress_dialog.setWindowTitle("加载进度")
         progress_dialog.setModal(True)
         progress_dialog.setValue(0)
+        # 使用 pathlib 处理路径
+        directory_path = Path(directory)
 
         # 设置进度条的大小
         progress_dialog.setFixedSize(400, 100)  # 宽度400，高度100
@@ -270,9 +284,21 @@ class MainWindow(QMainWindow):
         self.vis.destroy_window()
 
 def main(directory):
-    steps = list_files_in_directory(directory)
+    # 清空目标文件夹
+    target_directory = os.path.join(tempfile.gettempdir(), "product_simulator")  # 使用固定名称
+    if os.path.exists(target_directory):
+        shutil.rmtree(target_directory)  # 删除目标文件夹及其内容
+    os.makedirs(target_directory)  # 创建新的目标文件夹
+
+    # 复制指定路径下的所有文件到目标文件夹
+    for filename in os.listdir(directory):
+        full_file_name = os.path.join(directory, filename)
+        if os.path.isfile(full_file_name):
+            shutil.copy(full_file_name, target_directory)  # 复制文件到目标文件夹
+
+    steps = list_files_in_directory(target_directory)
     app = QApplication([])
-    window = MainWindow(directory, steps)
+    window = MainWindow(target_directory, steps)
     window.show()
     app.exec_()  # 启动应用程序
 
@@ -284,10 +310,12 @@ if __name__ == "__main__":
 
     if len(sys.argv) < 2:
         folder_path = QFileDialog.getExistingDirectory(None, "选择文件夹")  # 弹出选择文件夹对话框
+        folder_path = folder_path.encode('utf-8').decode('utf-8')  # 确保路径以 UTF-8 格式编码
         if folder_path:  # 如果用户选择了文件夹
             main(folder_path)
         else:
             print("未选择文件夹，程序将退出。")
             sys.exit(1)  # 退出程序
     else:
-        main(sys.argv[1])
+        folder_path = sys.argv[1].encode('utf-8').decode('utf-8')  # 保证路径的编码正确
+        main(folder_path)
